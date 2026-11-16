@@ -6,6 +6,7 @@
     <title>0S1 // Mühendislik Kütüphanesi</title>
     <style>
         /* Göz Yormayan Teknik Tema (True Dark) */
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
@@ -20,38 +21,42 @@
 
         /* Sol Menü (Sidebar) */
         .sidebar {
-            width: 280px;
+            width: 300px;
             background-color: #111111;
-            border-right: 1px solid #333;
+            border-right: 1px solid #222;
             display: flex;
             flex-direction: column;
-            transition: width 0.3s ease;
-            white-space: nowrap;
-            overflow-x: hidden;
+            transition: width 0.3s ease, transform 0.3s ease;
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
         }
 
         .sidebar.collapsed {
             width: 0;
+            transform: translateX(-300px);
             border-right: none;
         }
 
         .sidebar-content {
             padding: 20px;
-            width: 240px; /* İçerik genişliği sabit kalsın ki kapanırken taşmasın */
+            width: 300px;
+            overflow-y: auto;
+            height: 100%;
         }
 
         .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #222;
             margin-bottom: 20px;
             padding-bottom: 10px;
         }
 
         .sidebar-header h2 {
-            color: #555;
-            font-size: 14px;
+            color: #666;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin: 0;
@@ -59,52 +64,65 @@
 
         .close-btn {
             background: none;
-            border: none;
+            border: 1px solid #333;
             color: #888;
             cursor: pointer;
             font-family: monospace;
-            font-size: 16px;
+            font-size: 14px;
+            padding: 2px 6px;
+            border-radius: 3px;
         }
         
-        .close-btn:hover { color: #fff; }
+        .close-btn:hover { color: #fff; background: #222; }
 
-        /* Kategori Açılır/Kapanır (Accordion) */
+        /* Kategori Accordion */
         .menu-category {
             margin-bottom: 20px;
         }
 
         .menu-category-title {
-            color: #e0e0e0;
+            color: #d1d1d1;
             font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
             cursor: pointer;
             user-select: none;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #1a1a1a;
         }
         
         .menu-category-title:hover { color: #fff; }
 
         .menu-list {
             list-style: none;
-            padding-left: 15px;
+            padding-left: 10px;
             margin: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .menu-list li {
-            margin-bottom: 8px;
             color: #888;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
-            transition: color 0.2s;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
         }
 
         .menu-list li:hover {
             color: #ffffff;
-            text-decoration: underline;
+            background-color: #1a1a1a;
+        }
+
+        .menu-list li.active {
+            color: #ffffff;
+            background-color: #222;
+            border-left: 2px solid #555;
         }
 
         /* Ana İçerik Alanı */
@@ -122,10 +140,13 @@
             left: 20px;
             background: #111;
             border: 1px solid #333;
-            color: #888;
-            padding: 5px 10px;
+            color: #aaa;
+            padding: 6px 12px;
             cursor: pointer;
             font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            z-index: 5;
             display: none;
         }
 
@@ -133,24 +154,31 @@
 
         h1 {
             color: #ffffff;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 12px;
             font-weight: normal;
+            font-size: 24px;
+            margin-top: 15px;
         }
 
         p {
-            font-size: 15px;
-            max-width: 900px;
+            font-size: 14px;
+            max-width: 850px;
             text-align: justify;
+            color: #aaa;
+        }
+
+        .tag-container {
+            margin-bottom: 10px;
         }
 
         .tag {
-            background-color: #222;
+            background-color: #161616;
             padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #999;
-            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 11px;
+            color: #888;
+            border: 1px solid #222;
             margin-right: 5px;
         }
     </style>
@@ -161,18 +189,148 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-content">
             <div class="sidebar-header">
-                <h2>Dizin</h2>
-                <button class="close-btn" id="closeSidebar" title="Menüyü Kapat">[ < ]</button>
+                <h2>Araştırma Dizini</h2>
+                <button class="close-btn" id="closeSidebar" title="Menüyü Kapat">◄ Gizle</button>
             </div>
 
-            <!-- Kategori 1 -->
+            <!-- Kategori 1: HempBoat -->
             <div class="menu-category">
                 <div class="menu-category-title" onclick="toggleCategory('hempList', this)">
-                    <span>1. HempBoat</span>
-                    <span class="toggle-icon">[ - ]</span>
+                    <span>1. HempBoat & Biyokompozit</span>
+                    <span class="toggle-icon">[-]</span>
                 </div>
                 <ul class="menu-list" id="hempList">
-                    <li>1.1. Hammadde Tedarik</li>
-                    <li>1.2. TÜBİTAK 2209-B Test Planı</li>
-                    <li>1.3. Kompozit Teorisi</li>
-                    <li>1.4. Stealth &
+                    <li onclick="loadContent('hemp-1')" id="nav-hemp-1" class="active">1.1. Hammadde Tedarik Stratejisi</li>
+                    <li onclick="loadContent('hemp-2')" id="nav-hemp-2">1.2. TÜBİTAK 2209-B Test Planı</li>
+                    <li onclick="loadContent('hemp-3')" id="nav-hemp-3">1.3. Kompozit Teorisi & Delaminasyon</li>
+                    <li onclick="loadContent('hemp-4')" id="nav-hemp-4">1.4. Stealth & Radar Kesit Alanı</li>
+                    <li onclick="loadContent('hemp-5')" id="nav-hemp-5">1.5. Akustik Sönümleme & Sonar</li>
+                    <li onclick="loadContent('hemp-6')" id="nav-hemp-6">1.6. Balistik Beka & Yeşil Zırh</li>
+                </ul>
+            </div>
+
+            <!-- Kategori 2: CFD -->
+            <div class="menu-category">
+                <div class="menu-category-title" onclick="toggleCategory('cfdList', this)">
+                    <span>2. CFD Analizleri</span>
+                    <span class="toggle-icon">[-]</span>
+                </div>
+                <ul class="menu-list" id="cfdList">
+                    <li onclick="loadContent('cfd-1')" id="nav-cfd-1">2.1. OpenFOAM & WSL2 Altyapısı</li>
+                    <li onclick="loadContent('cfd-2')" id="nav-cfd-2">2.2. Şaft Kovanı Yatağı Hidrodinamiği</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ Ana İçerik -->
+    <div class="content">
+        <button class="open-btn" id="openSidebar" title="Menüyü Aç">☰ Dizin</button>
+        
+        <div id="content-container">
+            <!-- Dinamik olarak içerikler buraya gelecek -->
+        </div>
+    </div>
+
+    <!-- İşlevsel JavaScript & İçerik Veritabanı -->
+    <script>
+        // Veritabanı (İçerikler)
+        const database = {
+            "hemp-1": {
+                tags: ["HempBoat", "Tedarik", "Hammadde"],
+                title: "1.1. Hammadde Tedarik Stratejisi",
+                text: "Tila Kompozit ve Bpreg gibi firmalarla yürütülen görüşmeler neticesinde, kompozit dökümü için kimyasal terbiyesiz (ham), twill dokuma, 200-400 g/m² aralığında kenevir kumaş tedariği hedeflenmektedir. Piyasadaki dekoratif/boyalı kumaşların reçine tutunmasını engellediği ve delaminasyonu tetiklediği için ham teknik tekstil kullanımı şarttır. Romanya bağlantıları ve özel üretim alternatifleri masadadır."
+            },
+            "hemp-2": {
+                tags: ["HempBoat", "TÜBİTAK 2209-B", "Test"],
+                title: "1.2. TÜBİTAK 2209-B Test Planı",
+                text: "Proje kapsamında 3 adet 50x50 cm numune plakası üretilerek mekanik testlere sokulacaktır: 1 adet saf kenevir kompozit, 1 adet saf cam elyaf, 1 adet hibrit plaka. Vakum infüzyon yöntemiyle üretilecek bu plakalar mukavemet, ağırlık ve maliyet ekseninde karşılaştırılacaktır."
+            },
+            "hemp-3": {
+                tags: ["HempBoat", "Teori", "Mekanik"],
+                title: "1.3. Kompozit Teorisi & Delaminasyon",
+                text: "Kenevir liflerinin hidrofilik (suyu seven) yapısı ile epoksi matrisin hidrofobik karakteri arasındaki arayüzey uyumsuzluğu çözülmesi gereken temel mühendislik problemidir. Apre veya silan kaplama kimyasallarıyla lif-matris bağ mukavemeti artırılarak gerilme altındaki katman ayrılması (delaminasyon) minimize edilecektir."
+            },
+            "hemp-4": {
+                tags: ["HempBoat", "Savunma", "Stealth"],
+                title: "1.4. Stealth & Radar Kesit Alanı (RCS)",
+                text: "Kenevir biyo-kompozitlerinin dielektrik özellikleri, deniz araçlarında (İDA) radar dalgalarını sönümleme potansiyeli barındırmaktadır. Geleneksel fiberglasa kıyasla elektromanyetik dalga emilim spektrumu incelenmekte, düşük RCS (Radar Cross Section) imzası için Ar-Ge başlığı olarak tutulmaktadır."
+            },
+            "hemp-5": {
+                tags: ["HempBoat", "Akustik", "Sonar"],
+                title: "1.5. Akustik Sönümleme & Sonar İmzası",
+                text: "Doğal lif yapısının gözenekli ve heterojen matrisi, titreşim ve akustik dalgaların sönümlenmesinde avantaj sağlar. Askeri uygulamalarda su altı sonar seslerinin yansıtılması yerine emilmesi (akustik stealth) açısından kenevir kompozitlerin sönümleme katsayıları hesaplanmaktadır."
+            },
+            "hemp-6": {
+                tags: ["HempBoat", "Zırh", "Balistik"],
+                title: "1.6. Balistik Beka & Yeşil Zırh (Spall Liner)",
+                text: "Dış yüzeyde bazalt kumaş (yüksek darbe direnci), iç yüzeyde ise kenevir takviyeli kompozit kullanılarak %100 doğal yeşil zırh konsepti kurgulanmaktadır. İç katmanda (Spall Liner - Şarapnel Astarı) kenevirin sünek darbe emilim kabiliyeti ile mühimmat fragmentasyonunun arkaya geçişi engellenmektedir."
+            },
+            "cfd-1": {
+                tags: ["CFD", "OpenFOAM", "WSL2"],
+                title: "2.1. OpenFOAM & WSL2 Altyapısı",
+                text: "Windows Subsystem for Linux (WSL2) üzerinde Ubuntu 24.04 ortamı kurulmuş, OpenFOAM v2406 derlenmiştir. Termal ve hidrodinamik simülasyonlar için kararlı bir solver çalışma alanı oluşturulmuştur."
+            },
+            "cfd-2": {
+                tags: ["CFD", "Hidrodinamik", "Triboloji"],
+                title: "2.2. Şaft Kovanı Yatağı Hidrodinamiği",
+                text: "rhoSimpleFoam çözücüsü yardımıyla şaft kovanı yatağındaki yağ filmi kalınlığı, basınç dağılımı ve termal akışkan davranışları incelenmektedir. Yatak ömrünü uzatmak için kayma gerilmesi ve viskozite optimizasyonları simüle edilmektedir."
+            }
+        };
+
+        // İçerik Yükleme Fonksiyonu
+        function loadContent(id) {
+            const item = database[id];
+            if (!item) return;
+
+            // Aktif sınıfı güncelle
+            document.querySelectorAll('.menu-list li').forEach(el => el.classList.remove('active'));
+            const activeLi = document.getElementById('nav-' + id);
+            if (activeLi) activeLi.classList.add('active');
+
+            // HTML içeriğini oluştur
+            let tagsHtml = item.tags.map(t => `<span class="tag">${t}</span>`).join('');
+            
+            document.getElementById('content-container').innerHTML = `
+                <div class="tag-container">${tagsHtml}</div>
+                <h1>${item.title}</h1>
+                <p>${item.text}</p>
+            `;
+        }
+
+        // Sayfa ilk açıldığında 1.1'i yükle
+        window.onload = function() {
+            loadContent('hemp-1');
+        };
+
+        // Kategori Aç/Kapat (Accordion)
+        function toggleCategory(listId, headerElement) {
+            const list = document.getElementById(listId);
+            const icon = headerElement.querySelector('.toggle-icon');
+            
+            if (list.style.display === "none") {
+                list.style.display = "flex";
+                icon.textContent = "[-]";
+            } else {
+                list.style.display = "none";
+                icon.textContent = "[+]";
+            }
+        }
+
+        // Sol Menü (Sidebar) Aç/Kapat
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const openBtn = document.getElementById('openSidebar');
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.add('collapsed');
+            openBtn.style.display = 'block';
+        });
+
+        openBtn.addEventListener('click', () => {
+            sidebar.classList.remove('collapsed');
+            openBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
