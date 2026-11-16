@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0S1 // Mühendislik Kütüphanesi</title>
+    <style>
+        /* Göz Yormayan Teknik Tema (True Dark) */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a; /* Derin Siyah */
+            color: #b3b3b3; /* Mat Gri */
+            font-family: 'Consolas', 'Courier New', monospace; /* Teknik font */
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        /* Sol Menü (Sidebar) */
+        .sidebar {
+            width: 280px;
+            background-color: #111111;
+            border-right: 1px solid #333;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #555;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .menu-category {
+            margin-bottom: 25px;
+        }
+
+        .menu-category-title {
+            color: #e0e0e0;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding-left: 15px;
+            margin: 0;
+        }
+
+        .menu-list li {
+            margin-bottom: 8px;
+            color: #888;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .menu-list li:hover {
+            color: #ffffff;
+        }
+
+        /* Ana İçerik Alanı */
+        .content {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+            background-color: #0a0a0a;
+        }
+
+        h1 {
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            font-weight: normal;
+        }
+
+        h3 {
+            color: #e0e0e0;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 15px;
+            max-width: 900px;
+            text-align: justify;
+        }
+
+        .tag {
+            background-color: #222;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #999;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sol Navigasyon -->
+    <div class="sidebar">
+        <h2>Kütüphane Dizini</h2>
+
+        <div class="menu-category">
+            <div class="menu-category-title">1. HempBoat</div>
+            <ul class="menu-list">
+                <li>1.1. Hammadde Tedarik</li>
+                <li>1.2. TÜBİTAK 2209-B Test Planı</li>
+                <li>1.3. LSAM & Avenco</li>
+                <li>1.4. Kompozit Teorisi</li>
+            </ul>
+        </div>
+
+        <div class="menu-category">
+            <div class="menu-category-title">2. USV Savunma</div>
+            <ul class="menu-list">
+                <li>2.1. Stealth & Akustik</li>
+                <li>2.2. Balistik Beka & Yeşil Zırh</li>
+            </ul>
+        </div>
+
+        <div class="menu-category">
+            <div class="menu-category-title">3. CFD Analizleri</div>
+            <ul class="menu-list">
+                <li>3.1. OpenFOAM Altyapısı</li>
+                <li>3.2. Şaft Kovanı Yatağı</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Sağ Ana İçerik -->
+    <div class="content">
+        <span class="tag">HempBoat</span> <span class="tag">TÜBİTAK 2209-B</span>
+        <h1>Hammadde Tedarik Stratejisi</h1>
+        <p>
+            Buraya diğer konuşmadan getireceğin rapor metnini yerleştireceğiz. 
+            Sol menüdeki başlıklara tıkladığında buradaki yazının değişmesini sağlayan 
+            JavaScript yapısını metinler gelince ekleyeceğim.
+        </p>
+        <p>
+            Şimdilik arayüzün göz yorgunluğunu test et. Renk tonu ve teknik yapı tam istediğin gibi mi?
+        </p>
+    </div>
+
+</body>
+</html>
